@@ -1,0 +1,164 @@
+@startuml
+skinparam classFontName "Arial"
+skinparam classFontSize 12
+skinparam classAttributeFontSize 10
+skinparam linetype ortho
+skinparam ArrowColor Black
+skinparam classAttributeIconSize 0
+
+title Diagrama de Clases - Buscaminas
+
+interface IRenderable
+interface IActualizable
+interface IMemoria
+interface IEntrada
+interface ISalida
+
+class Juego {
+    - tiempo : int
+    - estado : string
+    + iniciar()
+    + finalizar()
+}
+
+class ControlPartida {
+    + iniciarNueva()
+    + cargarGuardada()
+}
+
+class Temporizador {
+    - tiempoTranscurrido : int
+    + iniciar()
+    + detener()
+}
+
+class Tablero {
+    - filas : int
+    - columnas : int
+    - minas : int
+    + generar()
+}
+
+class Casilla {
+    - posicionX : int
+    - posicionY : int
+    - tieneMina : bool
+    + destapar()
+    + marcar()
+}
+
+class EstadoCasilla {
+    - estado : string
+}
+
+class Mina
+
+class Coordenada {
+    - x : int
+    - y : int
+}
+
+class Usuario {
+    - nombre : string
+    - puntaje : int
+    + registrar()
+}
+
+class Puntaje {
+    - puntos : int
+    + calcular()
+}
+
+class RegistroJugadores {
+    - listaUsuarios : List<Usuario>
+    + agregarUsuario()
+}
+
+class Dificultad {
+    - nivel : string
+    - minas : int
+}
+
+class Estadisticas {
+    - partidasJugadas : int
+    - victorias : int
+}
+
+class MenuPrincipal {
+    + mostrarOpciones()
+}
+
+class MenuConfiguracion {
+    + cambiarDificultad()
+}
+
+class Renderizador {
+    + renderizar()
+}
+
+class Animacion {
+    + ejecutar()
+}
+
+class ControlEntrada {
+    + leerTeclado()
+    + leerClick()
+}
+
+class ControlSalida {
+    + mostrarMensaje()
+    + mostrarPantalla()
+}
+
+class Pantalla {
+    + dibujar()
+}
+
+class Memoria {
+    + guardarEstado()
+    + cargarEstado()
+}
+
+class Sonido {
+    + reproducir()
+}
+
+' Relaciones
+Juego *-- Tablero : tiene
+Juego *-- Dificultad : tiene
+Juego *-- ControlEntrada : tiene
+Juego *-- ControlSalida : tiene
+Juego *-- Temporizador : usa
+Juego *-- ControlPartida : usa
+Juego *-- Estadisticas : registra
+Juego *-- Memoria : guarda estado
+
+Tablero *-- Casilla : contiene
+Casilla o-- Mina : puede tener
+Casilla *-- EstadoCasilla : tiene estado
+Casilla *-- Coordenada : tiene posición
+
+Usuario o-- Puntaje : tiene
+RegistroJugadores o-- Usuario : contiene
+
+MenuPrincipal o-- Juego : controla
+MenuConfiguracion o-- Dificultad : ajusta
+
+Renderizador .up.|> IRenderable
+Pantalla .up.|> IRenderable
+Animacion .left.|> IRenderable
+
+Temporizador .right.|> IActualizable
+Puntaje .right.|> IActualizable
+
+Memoria .up.|> IMemoria
+
+ControlEntrada .left.|> IEntrada
+ControlSalida .right.|> ISalida
+
+Sonido --> Juego
+Animacion --> Juego
+
+
+a : tiene posición
+@enduml
